@@ -20,6 +20,7 @@ async function onPageLoad() {
 	try {
 		getTracks()
 			.then(tracks => {
+				console.log('%ctracks ::', 'color:tomato', tracks)
 				const html = renderTrackCards(tracks)
 				renderAt('#tracks', html)
 			})
@@ -92,6 +93,7 @@ async function handleCreateRace() {
 	renderAt('#race', renderRaceStartView(store.track_name))
 
 	// TODO - Get player_id and track_id from the store
+	console.log("%cstore :: ", "color:tomato", store)
 	
 	// const race = TODO - call the asynchronous method createRace, passing the correct parameters
 
@@ -332,12 +334,22 @@ function defaultFetchOpts() {
 
 // TODO - Make a fetch call (with error handling!) to each of the following API endpoints 
 
-function getTracks() {
+async function getTracks() {
 	console.log(`calling server :: ${SERVER}/api/tracks`)
 	// GET request to `${SERVER}/api/tracks`
 
 	// TODO: Fetch tracks
 	// TIP: Don't forget a catch statement!
+	// DONE ✅
+	try {
+		// const response = await fetch(`${SERVER}/api/tracks`)
+		// const tracks = await response.json();
+		// return tracks;
+		// ============
+		return await fetch(`${SERVER}/api/tracks`).then(response => response.json())
+	} catch(error) {
+		console.log("Problem with getTracks request ::", error)
+	}
 }
 
 function getRacers() {
