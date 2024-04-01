@@ -13,7 +13,17 @@ form h4 {
     border: 1px solid #fbf5f5;
     cursor: pointer;
     transition: all .6s;
+    /* display: flex; */
+    /* flex-direction: column; */
 }
+
+/* .racer-info {
+    font-size: 80%;
+}
+
+.racer-info:first-child {
+    margin-top: 6px;
+} */
 
 form h4:hover {
     box-shadow: none;
