@@ -127,27 +127,29 @@ async function handleCreateRace() {
 }
 
 function runRace(raceID) {
-	console.log('%crunRace::', 'background:teal', raceID)
 	return new Promise(resolve => {
-	// TODO: - use Javascript's built in setInterval method to get race info (getRace function) every 500ms
-		let raceUpdater = setInterval(() => {
-			console.log('%crunRace', 'background:darkred')
+	// COMPLETE ✅ - use Javascript's built in setInterval method to get race info (getRace function) every 500ms
+		let raceInterval = setInterval(() => {
+			getRace(raceID)
+				.then(race => {
+					if (race.status === "in-progress") {
+						// COMPLETE ✅  - if the race info status property is "in-progress", update the leaderboard by calling:
+						renderAt('#leaderBoard', raceProgress(race.positions))
+						// console.log('%crace.status', 'background:brown', race)
+					}
+					if (race.status === "finished") {
+						// TODO: - if the race info status property is "finished", run the following:
+						clearInterval(raceInterval) // to stop the interval from repeating
+						renderAt('#race', resultsView(race.positions)) // to render the results view
+						resolve(race) // resolve the promise
+					}
+				})
+				// remember to add error handling for the Promise
+				.catch(error => {
+					console.log('%cProblem with runRace::', 'color:tomato', error)
+				})
 		}, 500)
-	/* 
-		TODO: - if the race info status property is "in-progress", update the leaderboard by calling:
-
-		renderAt('#leaderBoard', raceProgress(res.positions))
-	*/
-
-	/* 
-		TODO: - if the race info status property is "finished", run the following:
-
-		clearInterval(raceInterval) // to stop the interval from repeating
-		renderAt('#race', resultsView(res.positions)) // to render the results view
-		resolve(res) // resolve the promise
-	*/
 	})
-	// remember to add error handling for the Promise
 }
 
 async function runCountdown() {
@@ -422,4 +424,9 @@ function accelerate(id) {
 	// POST request to `${SERVER}/api/races/${id}/accelerate`
 	// options parameter provided as defaultFetchOpts
 	// no body or datatype needed for this request
+	return fetch(`${SERVER}/api/races/${id}/accelerate`, {
+		method: 'POST',
+		...defaultFetchOpts()
+	})
+	.catch(err => console.log("Problem with accelerate request::", err))
 }
